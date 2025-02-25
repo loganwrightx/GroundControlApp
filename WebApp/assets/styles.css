@@ -25,6 +25,11 @@ h1 {
   justify-content: center;
 }
 
+.metadata-container {
+  width: 100vw;
+  height: 500px;
+}
+
 .metadata-row {
   width: 100vw;
   height: 100px;
@@ -42,7 +47,7 @@ h1 {
 .command-button {
   padding: 5px;
   border-radius: 8px;
-  background-color: white;
+  background-color: rgb(149, 233, 149);
   font-size: medium;
 }
 
@@ -52,20 +57,25 @@ h1 {
   align-items: center;
   justify-content: center;
   gap: 20px;
+  padding: 5px;
 }
 
-.timer {
+h1.timer {
+  font-size: 200px;
   width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: larger;
   padding: 20px;
-  color: rgb(130, 180, 180);
+  color: rgb(190, 221, 241);
 }
 
 .metadata-blockset {
   width: 100vw;
   display: block;
   height: 200px;
+}
+
+.blank-container {
+  font-weight: bold;
 }

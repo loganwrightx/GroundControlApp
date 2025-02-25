@@ -1,7 +1,6 @@
 import dash
 from dash import Dash, html, dcc, Input, Output, callback
 import serial
-from time import sleep
 
 from utils.operating_modes import *
 from utils.commands import *
@@ -24,18 +23,17 @@ app.layout = html.Div([
   dcc.Location(id="url", refresh=False),
   html.Title(children="Ground Control"),
   html.H1("Ground Control", style={"display": "flex", "width": "100vw", "align-items": "center"}),
-  dcc.Interval(interval=REFRESH_RATE, id="metadata-refresh"),
-  html.Div(id="metadata-container", className="metadata-container"),
   html.Div([
     html.Button(commands[i], id=f"command-{i}", className="command-button") for i in range(len(Commands))
   ], className="command-buttons-container"),
-  html.Div(id="blank-container")
+  dcc.Interval(interval=REFRESH_RATE, id="metadata-refresh"),
+  html.Div(id="metadata-container", className="metadata-container"),
+  html.Div(id="blank-container", className="blank-container")
 ], className="web-app")
 
 @callback(
   Output("metadata-container", "children"),
-  Input("metadata-refresh", "n_intervals"),
-  prevent_initial_call = True
+  Input("metadata-refresh", "n_intervals")
 )
 def update_metadata(n_intervals):
   global incoming_packet
@@ -46,9 +44,9 @@ def update_metadata(n_intervals):
     incoming_packet.extend(["" for _ in range(6 - len(incoming_packet))])
   
   time_stamp, operating_mode, holddown_status, counting, timer_left, vehicle_packet_available = incoming_packet
-  
+  timer_left = "" if timer_left == "" else str(int(timer_left) - 1)
   return html.Div([
-    html.Div(timer_left, className="timer"),
+    html.H1("T - 0:" + timer_left if timer_left != "" else "T - 0:00", className="timer"),
     html.Div([
       html.Div(time_stamp, className="metadata-element"),
       html.Div(operating_mode, className="metadata-element"),
@@ -115,7 +113,8 @@ def liftoff(n_clicks):
 
 @callback(
   Output("blank-container", "children", allow_duplicate=True),
-  Input("command-7", "n_clicks")
+  Input("command-7", "n_clicks"),
+  prevent_initial_call = True
 )
 def lost_comms(n_clicks):
   ser.write("7".encode())
