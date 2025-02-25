@@ -1,0 +1,3 @@
+https://docs.arduino.cc/resources/pinouts/A000005-full-pinout.pdf
+https://projecthub.arduino.cc/tmekinyan/how-to-use-the-nrf24l01-module-with-arduino-813957
+https://www.mouser.com/datasheet/2/308/rfp30n06le-1195941.pdf
