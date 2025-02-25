@@ -1,0 +1,55 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.web-app {
+  width: 100vw;
+  min-height: 100vh;
+  padding: 10px;
+  background-color: rgb(20, 20, 20);
+  color: white;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+h1 {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metadata-row {
+  width: 100vw;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.metadata-element {
+  padding: 10px;
+  font-size: medium;
+  font-weight: bold;
+}
+
+.command-button {
+  padding: 5px;
+  border-radius: 8px;
+  background-color: white;
+  font-size: medium;
+}
+
+.command-buttons-container {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
