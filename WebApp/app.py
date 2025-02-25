@@ -1,13 +1,19 @@
 import dash
 from dash import Dash, html, dcc, Input, Output, callback
 import serial
+from time import sleep
 
 from utils.operating_modes import *
 from utils.commands import *
 
 om = OperatingMode(0)
 
-ser = serial.Serial(port="/dev/tty.usbmodem101", baudrate=115200)
+try:
+  ser = serial.Serial(port="/dev/tty.usbmodem101", baudrate=115200)
+except serial.serialutil.SerialException as E:
+  print(f"Encountered a problem: {E.strerror}")
+  print("Check connections and restart the app.")
+  exit(0)
 
 app = Dash(__name__, suppress_callback_exceptions=True, assets_folder="./assets")
 
@@ -42,12 +48,14 @@ def update_metadata(n_intervals):
   time_stamp, operating_mode, holddown_status, counting, timer_left, vehicle_packet_available = incoming_packet
   
   return html.Div([
-    html.Div(time_stamp, className="metadata-element"),
-    html.Div(operating_mode, className="metadata-element"),
-    html.Div(holddown_status, className="metadata-element"),
-    html.Div(counting, className="metadata-element"),
-    html.Div(timer_left, className="metadata-element")
-  ], className="metadata-row")
+    html.Div(timer_left, className="timer"),
+    html.Div([
+      html.Div(time_stamp, className="metadata-element"),
+      html.Div(operating_mode, className="metadata-element"),
+      html.Div(holddown_status, className="metadata-element"),
+      html.Div(counting, className="metadata-element")
+    ], className="metadata-row")
+  ], className="metadata-blockset")
 
 @callback(
   Output("blank-container", "children", allow_duplicate=True),
@@ -107,8 +115,7 @@ def liftoff(n_clicks):
 
 @callback(
   Output("blank-container", "children", allow_duplicate=True),
-  Input("command-7", "n_clicks"),
-  prevent_initial_call = True
+  Input("command-7", "n_clicks")
 )
 def lost_comms(n_clicks):
   ser.write("7".encode())

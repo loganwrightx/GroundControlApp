@@ -53,3 +53,19 @@ h1 {
   justify-content: center;
   gap: 20px;
 }
+
+.timer {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: larger;
+  padding: 20px;
+  color: rgb(130, 180, 180);
+}
+
+.metadata-blockset {
+  width: 100vw;
+  display: block;
+  height: 200px;
+}
