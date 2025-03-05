@@ -17,18 +17,18 @@ except serial.serialutil.SerialException as E:
 app = Dash(__name__, suppress_callback_exceptions=True, assets_folder="./assets")
 
 incoming_packet: list = ["" for _ in range(6)]
-REFRESH_RATE: int = 200
+REFRESH_RATE: int = 100
 
 app.layout = html.Div([
   dcc.Location(id="url", refresh=False),
   html.Title(children="Ground Control"),
+  html.Div(id="blank-container", className="blank-container"),
   html.H1("Ground Control", style={"display": "flex", "width": "100vw", "align-items": "center"}),
   html.Div([
     html.Button(commands[i], id=f"command-{i}", className="command-button") for i in range(len(Commands))
   ], className="command-buttons-container"),
   dcc.Interval(interval=REFRESH_RATE, id="metadata-refresh"),
-  html.Div(id="metadata-container", className="metadata-container"),
-  html.Div(id="blank-container", className="blank-container")
+  html.Div(id="metadata-container", className="metadata-container")
 ], className="web-app")
 
 @callback(
@@ -44,7 +44,7 @@ def update_metadata(n_intervals):
     incoming_packet.extend(["" for _ in range(6 - len(incoming_packet))])
   
   time_stamp, operating_mode, holddown_status, counting, timer_left, vehicle_packet_available = incoming_packet
-  timer_left = "" if timer_left == "" else str(int(timer_left) - 1)
+  timer_left = "" if timer_left == "" else str(timer_left)
   return html.Div([
     html.H1("T - 0:" + timer_left if timer_left != "" else "T - 0:00", className="timer"),
     html.Div([
@@ -62,6 +62,7 @@ def update_metadata(n_intervals):
 )
 def abort(n_clicks):
   ser.write("0".encode())
+  return html.H1("ABORTED! Reset to continue...")
 
 @callback(
   Output("blank-container", "children", allow_duplicate=True),
@@ -102,6 +103,7 @@ def ignition_sequence_start(n_clicks):
 )
 def reset(n_clicks):
   ser.write("5".encode())
+  return ""
 
 @callback(
   Output("blank-container", "children", allow_duplicate=True),

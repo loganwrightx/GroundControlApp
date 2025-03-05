@@ -1,8 +1,8 @@
 html, body {
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   line-height: 1.6;
@@ -47,7 +47,8 @@ h1 {
 .command-button {
   padding: 5px;
   border-radius: 8px;
-  background-color: rgb(149, 233, 149);
+  background-color: rgb(183, 63, 33);
+  color: white;
   font-size: medium;
 }
 
@@ -61,12 +62,12 @@ h1 {
 }
 
 h1.timer {
-  font-size: 200px;
+  font-size: 150px;
   width: 100vw;
-  display: flex;
+  display: grid;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 10px;
   color: rgb(190, 221, 241);
 }
 
@@ -78,4 +79,6 @@ h1.timer {
 
 .blank-container {
   font-weight: bold;
+  padding: 10px;
+  color: red;
 }
