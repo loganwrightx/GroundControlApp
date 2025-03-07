@@ -13,7 +13,7 @@ class Commands(Enum):
 commands = [
   "ABORT",
   "BEGIN_COUNTDOWN",
-  "FREEZE",
+  "HOLD",
   "VALIDATE_VEHICLE",
   "HOLDDOWN_ENGAGE",
   "HOLDDOWN_DISENGAGE",

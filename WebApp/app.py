@@ -1,6 +1,7 @@
 import dash
 from dash import Dash, html, dcc, Input, Output, callback
 import serial
+import time
 
 from utils.operating_modes import *
 from utils.commands import *
@@ -17,7 +18,7 @@ except serial.serialutil.SerialException as E:
 app = Dash(__name__, suppress_callback_exceptions=True, assets_folder="./assets")
 
 incoming_packet: list = ["" for _ in range(6)]
-REFRESH_RATE: int = 100
+REFRESH_RATE: int = 50
 
 app.layout = html.Div([
   dcc.Location(id="url", refresh=False),
@@ -39,14 +40,33 @@ def update_metadata(n_intervals):
   global incoming_packet
   if ser.in_waiting > 0:
     incoming_packet = ser.readline().decode()[0:-2].split("\t")
+    print(incoming_packet)
   
   if len(incoming_packet) < 6:
     incoming_packet.extend(["" for _ in range(6 - len(incoming_packet))])
   
   time_stamp, operating_mode, holddown_status, counting, timer_left, vehicle_packet_available = incoming_packet
-  timer_left = "" if timer_left == "" else str(timer_left)
+  timer_left: str | None
+  
+  if timer_left == "":
+    timer = "T + 00:00:00"
+  elif timer_left is not None:
+    if timer_left.startswith("-"):
+      sign = "+"
+      timer_left = int(timer_left[1:])
+    else:
+      sign = "-"
+      timer_left = int(timer_left)
+    
+    secs = timer_left % 60
+    mins = timer_left // 60
+    hrs = mins // 60
+    mins = mins % 60
+    
+    timer = f"T {sign} {hrs:02d}:{mins:02d}:{secs:02d}"
+  
   return html.Div([
-    html.H1("T - 0:" + timer_left if timer_left != "" else "T - 0:00", className="timer"),
+    html.H1(timer, className="timer"),
     html.Div([
       html.Div(time_stamp, className="metadata-element"),
       html.Div(operating_mode, className="metadata-element"),
